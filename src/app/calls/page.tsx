@@ -23,24 +23,6 @@ const outcomeBadge = (o: string) => {
   return map[o] || "badge-gray";
 };
 
-const MOCK_LEADS: Lead[] = Array.from({ length: 10 }, (_, i) => ({
-  $id: `lead_${i + 1}`, $createdAt: new Date().toISOString(),
-  phone: `+9230012${i}4567`, country: "Pakistan",
-  platform: "WhatsApp" as any, status: "contacted" as any,
-}));
-
-const MOCK_CALLS: CallLog[] = Array.from({ length: 15 }, (_, i) => ({
-  $id: `call_${i}`, $createdAt: new Date(Date.now() - i * 3600000).toISOString(),
-  leadId: `lead_${(i % 10) + 1}`,
-  agentId: `agent_${(i % 3) + 1}`,
-  agentName: ["Ahmed", "Bilal", "Usman"][i % 3],
-  callType: i % 3 === 0 ? "viki" : "whatsapp",
-  date: format(new Date(Date.now() - i * 86400000 * (i % 3 || 1)), "yyyy-MM-dd"),
-  duration: Math.floor(Math.random() * 10) + 2,
-  outcome: OUTCOMES[i % OUTCOMES.length].value as any,
-  notes: i % 4 === 0 ? "Follow up needed" : undefined,
-}));
-
 export default function CallsPage() {
   const { user } = useAuth();
   const [calls, setCalls] = useState<CallLog[]>([]);
@@ -68,8 +50,9 @@ export default function CallsPage() {
       setCalls(callRes.documents as unknown as CallLog[]);
       setLeads(leadRes.documents as unknown as Lead[]);
     } catch {
-      setCalls(MOCK_CALLS);
-      setLeads(MOCK_LEADS);
+      toast.error("Data load nahi hua — Appwrite connection check karein");
+      setCalls([]);
+      setLeads([]);
     } finally { setLoading(false); }
   };
 

@@ -13,24 +13,8 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, L
 const today = format(new Date(), "yyyy-MM-dd");
 const thisMonth = format(new Date(), "yyyy-MM");
 
-const MOCK_WEEKLY = [
-  { day: "Mon", whatsapp: 24, viber: 18 },
-  { day: "Tue", whatsapp: 30, viber: 22 },
-  { day: "Wed", whatsapp: 18, viber: 15 },
-  { day: "Thu", whatsapp: 35, viber: 28 },
-  { day: "Fri", whatsapp: 28, viber: 20 },
-  { day: "Sat", whatsapp: 42, viber: 35 },
-  { day: "Sun", whatsapp: 15, viber: 10 },
-];
-
-const MOCK_TREND = [
-  { month: "Nov", leads: 62, students: 18 },
-  { month: "Dec", leads: 78, students: 24 },
-  { month: "Jan", leads: 55, students: 15 },
-  { month: "Feb", leads: 90, students: 31 },
-  { month: "Mar", leads: 110, students: 38 },
-  { month: "Apr", leads: 125, students: 43 },
-];
+const MOCK_WEEKLY: any[] = [];
+const MOCK_TREND: any[] = [];
 
 const tooltipStyle = {
   backgroundColor: "#1e293b", border: "1px solid #334155",

@@ -15,19 +15,14 @@ export default function TargetsPage() {
   const [form, setForm] = useState({ agentName: "", leadIdFrom: "", leadIdTo: "", targetCalls: "30" });
   const [saving, setSaving] = useState(false);
 
-  const MOCK_TARGETS: DailyTarget[] = [
-    { $id: "t1", $createdAt: new Date().toISOString(), agentId: "agent_1", agentName: "Ahmed", date: format(new Date(), "yyyy-MM-dd"), leadIdFrom: "Lead 1", leadIdTo: "Lead 30", targetCalls: 30, completed: true },
-    { $id: "t2", $createdAt: new Date().toISOString(), agentId: "agent_2", agentName: "Bilal", date: format(new Date(), "yyyy-MM-dd"), leadIdFrom: "Lead 31", leadIdTo: "Lead 60", targetCalls: 30, completed: false },
-    { $id: "t3", $createdAt: new Date().toISOString(), agentId: "agent_3", agentName: user?.name || "You", date: format(new Date(), "yyyy-MM-dd"), leadIdFrom: "Lead 61", leadIdTo: "Lead 90", targetCalls: 30, completed: false },
-  ];
-
   const loadTargets = async () => {
     setLoading(true);
     try {
       const res = await getDailyTargets(selectedDate);
       setTargets(res.documents as unknown as DailyTarget[]);
     } catch {
-      setTargets(MOCK_TARGETS);
+      toast.error("Data load nahi hua — Appwrite connection check karein");
+      setTargets([]);
     } finally { setLoading(false); }
   };
 
