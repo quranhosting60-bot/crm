@@ -41,12 +41,12 @@ const cleanPhone = (phone: string) => phone.replace(/[\s\-\(\)\+]/g, "");
 type FormData = {
   phone: string; country: string; platform: Platform;
   status: LeadStatus; notes: string; assignedTo: string;
-  trialDate: string; trialTime: string; feeAmount: string; leadSource: string;
+  trialDate: string; feeAmount: string; leadSource: string;
 };
 
 const EMPTY_FORM: FormData = {
   phone: "", country: "Pakistan", platform: "Facebook",
-  status: "new", notes: "", assignedTo: "", trialDate: "", trialTime: "", feeAmount: "", leadSource: "Google Ads",
+  status: "new", notes: "", assignedTo: "", trialDate: "", feeAmount: "", leadSource: "Google Ads",
 };
 
 // Call Log Modal (shown after clicking call/chat button to log the outcome)
@@ -178,7 +178,7 @@ export default function LeadsPage() {
   const openAdd = () => { setEditLead(null); setForm(EMPTY_FORM); setShowModal(true); };
   const openEdit = (l: Lead) => {
     setEditLead(l);
-    setForm({ phone: l.phone, country: l.country, platform: l.platform, status: l.status, notes: l.notes || "", assignedTo: l.assignedTo || "", trialDate: l.trialDate || "", trialTime: (l as any).trialTime || "", feeAmount: l.feeAmount?.toString() || "", leadSource: (l as any).leadSource || "Google Ads" });
+    setForm({ phone: l.phone, country: l.country, platform: l.platform, status: l.status, notes: l.notes || "", assignedTo: l.assignedTo || "", trialDate: l.trialDate || "", feeAmount: l.feeAmount?.toString() || "", leadSource: (l as any).leadSource || "Google Ads" });
     setShowModal(true);
   };
   const handleSave = async () => {
@@ -369,15 +369,9 @@ export default function LeadsPage() {
                 <input className="crm-input" placeholder="Agent name" value={form.assignedTo} onChange={e => setForm({ ...form, assignedTo: e.target.value })} />
               </div>
               {(form.status === "trial_booked" || form.status === "trial_done") && (
-                <div className="grid grid-cols-2 gap-3">
-                  <div>
-                    <label className="text-xs font-medium text-slate-400 mb-1.5 block">Trial Date</label>
-                    <input type="date" className="crm-input" value={form.trialDate} onChange={e => setForm({ ...form, trialDate: e.target.value })} />
-                  </div>
-                  <div>
-                    <label className="text-xs font-medium text-slate-400 mb-1.5 block">Trial Time</label>
-                    <input type="time" className="crm-input" value={form.trialTime} onChange={e => setForm({ ...form, trialTime: e.target.value })} />
-                  </div>
+                <div>
+                  <label className="text-xs font-medium text-slate-400 mb-1.5 block">Trial Date</label>
+                  <input type="date" className="crm-input" value={form.trialDate} onChange={e => setForm({ ...form, trialDate: e.target.value })} />
                 </div>
               )}
               {form.status === "joined" && (
