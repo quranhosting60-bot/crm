@@ -2,27 +2,27 @@
 "use client";
 import { useEffect, useState } from "react";
 import { getLeads, updateLead, Lead } from "@/lib/appwrite";
-import { format, isAfter, isBefore, isToday } from "date-fns";
+import { format, isAfter } from "date-fns";
 import toast from "react-hot-toast";
 import { BookOpen, Calendar, CheckCircle2, XCircle, Clock } from "lucide-react";
 
-const MOCK_TRIALS: Lead[] = [
-  { $id: "l1", $createdAt: new Date().toISOString(), phone: "+923001234567", country: "Pakistan", platform: "Facebook", status: "trial_booked", trialDate: format(new Date(), "yyyy-MM-dd") },
-  { $id: "l2", $createdAt: new Date().toISOString(), phone: "+447891234567", country: "United Kingdom", platform: "Instagram", status: "trial_booked", trialDate: format(new Date(Date.now() + 86400000), "yyyy-MM-dd") },
-  { $id: "l3", $createdAt: new Date().toISOString(), phone: "+923009876543", country: "Pakistan", platform: "YouTube", status: "trial_done", trialDate: format(new Date(Date.now() - 86400000 * 2), "yyyy-MM-dd") },
-  { $id: "l4", $createdAt: new Date().toISOString(), phone: "+16467891234", country: "United States", platform: "Facebook", status: "trial_done", trialDate: format(new Date(Date.now() - 86400000), "yyyy-MM-dd") },
-];
-
 export default function TrialsPage() {
   const [trials, setTrials] = useState<Lead[]>([]);
+  const [donedTrials, setDoneTrials] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
 
   const loadTrials = async () => {
     try {
-      const res = await getLeads({ status: "trial_booked" });
-      setTrials(res.documents as unknown as Lead[]);
+      const [booked, done] = await Promise.all([
+        getLeads({ status: "trial_booked" }),
+        getLeads({ status: "trial_done" }),
+      ]);
+      setTrials(booked.documents as unknown as Lead[]);
+      setDoneTrials(done.documents as unknown as Lead[]);
     } catch {
-      setTrials(MOCK_TRIALS);
+      toast.error("Data load nahi hua — Appwrite connection check karein");
+      setTrials([]);
+      setDoneTrials([]);
     } finally { setLoading(false); }
   };
 
@@ -38,7 +38,7 @@ export default function TrialsPage() {
 
   const today = trials.filter((t) => t.trialDate === format(new Date(), "yyyy-MM-dd"));
   const upcoming = trials.filter((t) => t.trialDate && isAfter(new Date(t.trialDate), new Date()));
-  const done = MOCK_TRIALS.filter((t) => t.status === "trial_done");
+  const done = donedTrials;
 
   return (
     <div>

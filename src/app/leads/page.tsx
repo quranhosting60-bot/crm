@@ -120,21 +120,9 @@ export default function LeadsPage() {
     try {
       const res = await getLeads(filterStatus ? { status: filterStatus as LeadStatus } : undefined);
       setLeads(res.documents as unknown as Lead[]);
-    } catch {
-      // Use mock data if Appwrite not configured
-      const mock: Lead[] = Array.from({ length: 8 }, (_, i) => ({
-        $id: `lead_${i + 1}`,
-        $createdAt: new Date(Date.now() - i * 86400000 * 2).toISOString(),
-        phone: `+9230012${String(i).padStart(2, "0")}4567`,
-        country: COUNTRIES[i % COUNTRIES.length],
-        platform: PLATFORMS[i % PLATFORMS.length],
-        status: STATUSES[i % STATUSES.length].value,
-        notes: i % 3 === 0 ? "Interested in Quran classes" : undefined,
-      }));
-      setLeads(mock);
-      const stats: Record<string, any> = {};
-      mock.forEach((l, i) => { stats[l.$id] = { whatsapp: i % 4, viki: i % 3, chat: i % 2 }; });
-      setCallStats(stats);
+    } catch (err: any) {
+      toast.error("Data load nahi hua — Appwrite connection check karein");
+      setLeads([]);
     } finally { setLoading(false); }
   }, [filterStatus]);
 

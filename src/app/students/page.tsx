@@ -6,16 +6,6 @@ import { format } from "date-fns";
 import toast from "react-hot-toast";
 import { GraduationCap, DollarSign, CheckCircle2, XCircle, Edit3, X } from "lucide-react";
 
-const MOCK_STUDENTS: Lead[] = Array.from({ length: 8 }, (_, i) => ({
-  $id: `s${i}`, $createdAt: new Date(Date.now() - i * 86400000 * 7).toISOString(),
-  phone: `+9230012${i}4567`, country: ["Pakistan", "UK", "UAE", "USA"][i % 4],
-  platform: ["Facebook", "Instagram", "YouTube"][i % 3] as any,
-  status: "joined" as const,
-  joinedDate: format(new Date(Date.now() - i * 86400000 * 7), "yyyy-MM-dd"),
-  feeAmount: [5000, 6000, 7000, 8000][i % 4],
-  feePaid: i % 3 !== 0,
-}));
-
 export default function StudentsPage() {
   const [students, setStudents] = useState<Lead[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,7 +17,8 @@ export default function StudentsPage() {
       const res = await getLeads({ status: "joined" });
       setStudents(res.documents as unknown as Lead[]);
     } catch {
-      setStudents(MOCK_STUDENTS);
+      toast.error("Data load nahi hua — Appwrite connection check karein");
+      setStudents([]);
     } finally { setLoading(false); }
   };
 

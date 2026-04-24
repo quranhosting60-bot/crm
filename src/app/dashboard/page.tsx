@@ -127,11 +127,11 @@ export default function DashboardPage() {
         setMyTarget(mine || null);
       } catch {
         setStats({
-          totalLeads: 125, totalCalls: 842, whatsappCalls: 520,
-          vikiCalls: 322, totalTrials: 43, totalStudents: 38,
-          totalFee: 228000, joinRate: "30.4",
+          totalLeads: 0, totalCalls: 0, whatsappCalls: 0,
+          vikiCalls: 0, totalTrials: 0, totalStudents: 0,
+          totalFee: 0, joinRate: "0",
         });
-        setMyTarget({ targetCalls: 30, leadIdFrom: "Lead 1", leadIdTo: "Lead 30", completed: false });
+        setMyTarget(null);
       } finally { setLoading(false); }
     }
     load();
