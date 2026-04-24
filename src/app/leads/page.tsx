@@ -1,69 +1,29 @@
-import { Client, Databases, ID } from "appwrite";
+"use client";
 
-const client = new Client()
-  .setEndpoint("https://sgp.cloud.appwrite.io/v1")
-  .setProject("69d11dbd0038095220c4");
+import { useEffect, useState } from "react";
 
-const db = new Databases(client);
+export default function LeadsPage() {
+  const [leads, setLeads] = useState([]);
 
-const DATABASE_ID = "69d11e1f001579c962e6";
-const COLLECTION_ID = "leads";
+  useEffect(() => {
+    fetch("/api/leads")
+      .then(res => res.json())
+      .then(data => setLeads(data.documents || []));
+  }, []);
 
-// ✅ GET (fetch leads)
-export async function GET() {
-  try {
-    const res = await db.listDocuments(DATABASE_ID, COLLECTION_ID);
-    return Response.json(res);
-  } catch (err: any) {
-    return Response.json({ error: err.message });
-  }
-}
+  return (
+    <div style={{ padding: 20 }}>
+      <h1>Leads Page</h1>
 
-// ✅ POST (create lead)
-export async function POST(req: Request) {
-  try {
-    const body = await req.json();
-
-    const res = await db.createDocument(
-      DATABASE_ID,
-      COLLECTION_ID,
-      ID.unique(),
-      body
-    );
-
-    return Response.json(res);
-  } catch (err: any) {
-    return Response.json({ error: err.message });
-  }
-}
-
-// ✅ PUT (update lead)
-export async function PUT(req: Request) {
-  try {
-    const { id, data } = await req.json();
-
-    const res = await db.updateDocument(
-      DATABASE_ID,
-      COLLECTION_ID,
-      id,
-      data
-    );
-
-    return Response.json(res);
-  } catch (err: any) {
-    return Response.json({ error: err.message });
-  }
-}
-
-// ✅ DELETE (delete lead)
-export async function DELETE(req: Request) {
-  try {
-    const { id } = await req.json();
-
-    await db.deleteDocument(DATABASE_ID, COLLECTION_ID, id);
-
-    return Response.json({ success: true });
-  } catch (err: any) {
-    return Response.json({ error: err.message });
-  }
+      {leads.length === 0 ? (
+        <p>No data</p>
+      ) : (
+        leads.map((lead: any) => (
+          <div key={lead.$id}>
+            {lead.phone} - {lead.country}
+          </div>
+        ))
+      )}
+    </div>
+  );
 }
