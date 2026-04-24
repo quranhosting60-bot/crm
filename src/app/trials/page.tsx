@@ -96,7 +96,13 @@ export default function TrialsPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-sm font-medium text-slate-300">{trial.trialDate ? format(new Date(trial.trialDate), "d MMM yyyy") : "—"}</span>
+                    <span className="text-sm font-medium text-slate-300">
+                      {trial.trialDate ? format(new Date(trial.trialDate), "d MMM yyyy") : "—"}
+                      <br />
+                      <span className="text-xs text-slate-500">
+                        {trial.trialTime || ""}
+                      </span>
+                    </span>
                     <div className="flex gap-2">
                       <button onClick={() => handleOutcome(trial, "joined")} className="flex items-center gap-1 px-3 py-1.5 bg-emerald-900/30 text-emerald-400 border border-emerald-800 rounded-lg text-xs font-medium hover:bg-emerald-900/50 transition-colors">
                         <CheckCircle2 size={12} /> Join
@@ -124,7 +130,7 @@ export default function TrialsPage() {
           <table className="crm-table">
             <thead>
               <tr>
-                <th>Phone</th><th>Country</th><th>Platform</th><th>Trial Date</th><th>Outcome</th>
+                <th>Phone</th><th>Country</th><th>Platform</th><th>Trial Date & Time</th><th>Outcome</th>
               </tr>
             </thead>
             <tbody>
@@ -133,7 +139,11 @@ export default function TrialsPage() {
                   <td><span className="font-medium text-white">{t.phone}</span></td>
                   <td>{t.country}</td>
                   <td>{t.platform}</td>
-                  <td>{t.trialDate || "—"}</td>
+                  <td>
+                    {t.trialDate || "—"}
+                    <br />
+                    <span className="text-xs text-slate-500">{t.trialTime || ""}</span>
+                  </td>
                   <td><span className={`badge ${t.status === "joined" ? "badge-green" : "badge-red"}`}>{t.status === "joined" ? "Join Kar Liya" : "Nahi Kiya"}</span></td>
                 </tr>
               ))}
